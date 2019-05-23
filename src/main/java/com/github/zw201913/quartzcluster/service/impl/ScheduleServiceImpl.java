@@ -1,9 +1,9 @@
-package com.github.quartzcluster.service.impl;
+package com.github.zw201913.quartzcluster.service.impl;
 
-import com.github.quartzcluster.service.IScheduleService;
-import com.github.quartzcluster.support.CronJobDefinition;
-import com.github.quartzcluster.support.Key;
-import com.github.quartzcluster.support.SimpleJobDefinition;
+import com.github.zw201913.quartzcluster.service.IScheduleService;
+import com.github.zw201913.quartzcluster.support.CronJobDefinition;
+import com.github.zw201913.quartzcluster.support.Key;
+import com.github.zw201913.quartzcluster.support.SimpleJobDefinition;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

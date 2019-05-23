@@ -1,4 +1,4 @@
-package com.github.quartzcluster.support;
+package com.github.zw201913.quartzcluster.support;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.PersistJobDataAfterExecution;

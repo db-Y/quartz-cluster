@@ -1,13 +1,14 @@
 plugins {
     id 'org.springframework.boot' version '2.1.5.RELEASE'
     id 'java'
-    id 'war'
 }
 
-apply plugin: 'io.spring.dependency-management'
 
-group = 'com.github'
-version = '0.0.1-SNAPSHOT'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+
+group = 'com.github.zw201913'
+version = '1.0.0.RELEASE'
 sourceCompatibility = '11'
 
 configurations {
@@ -27,6 +28,4 @@ dependencies {
 
     compile 'org.apache.commons:commons-lang3:3.9'
     compile 'com.google.guava:guava:27.1-jre'
-    //providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-    //testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

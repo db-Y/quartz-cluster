@@ -1,4 +1,4 @@
-package com.github.quartzcluster.support;
+package com.github.zw201913.quartzcluster.support;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

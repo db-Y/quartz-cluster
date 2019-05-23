@@ -1,6 +1,6 @@
-package com.github.quartzcluster.annotation;
+package com.github.zw201913.quartzcluster.annotation;
 
-import com.github.quartzcluster.config.DynamicSchedulingConfigurationSelector;
+import com.github.zw201913.quartzcluster.config.DynamicSchedulingConfigurationSelector;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;

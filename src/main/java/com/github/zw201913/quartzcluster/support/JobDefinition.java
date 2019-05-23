@@ -1,6 +1,6 @@
-package com.github.quartzcluster.support;
+package com.github.zw201913.quartzcluster.support;
 
-import com.github.quartzcluster.config.Const;
+import com.github.zw201913.quartzcluster.config.Const;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;

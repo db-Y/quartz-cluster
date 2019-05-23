@@ -1,6 +1,6 @@
-package com.github.quartzcluster.config;
+package com.github.zw201913.quartzcluster.config;
 
-import com.github.quartzcluster.annotation.EnableQuartzCluster;
+import com.github.zw201913.quartzcluster.annotation.EnableQuartzCluster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;

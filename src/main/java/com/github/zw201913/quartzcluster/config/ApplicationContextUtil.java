@@ -1,4 +1,4 @@
-package com.github.quartzcluster.config;
+package com.github.zw201913.quartzcluster.config;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

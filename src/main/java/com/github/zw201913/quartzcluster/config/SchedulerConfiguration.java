@@ -1,4 +1,4 @@
-package com.github.quartzcluster.config;
+package com.github.zw201913.quartzcluster.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;

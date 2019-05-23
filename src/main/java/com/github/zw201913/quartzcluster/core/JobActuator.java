@@ -1,7 +1,7 @@
-package com.github.quartzcluster.core;
+package com.github.zw201913.quartzcluster.core;
 
-import com.github.quartzcluster.config.ApplicationContextUtil;
-import com.github.quartzcluster.support.JobDefinition;
+import com.github.zw201913.quartzcluster.config.ApplicationContextUtil;
+import com.github.zw201913.quartzcluster.support.JobDefinition;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,4 +1,4 @@
-package com.github.quartzcluster.support;
+package com.github.zw201913.quartzcluster.support;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import org.quartz.TriggerKey;
 /** @author zouwei */
 @Slf4j
 @Data
-public class Key {
+public class Key{
 
     protected static final String DEFAULT_GROUP = "default_group";
 

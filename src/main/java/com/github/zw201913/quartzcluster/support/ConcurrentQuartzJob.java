@@ -1,7 +1,7 @@
-package com.github.quartzcluster.support;
+package com.github.zw201913.quartzcluster.support;
 
-import com.github.quartzcluster.config.Const;
-import com.github.quartzcluster.core.JobActuator;
+import com.github.zw201913.quartzcluster.config.Const;
+import com.github.zw201913.quartzcluster.core.JobActuator;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 import org.springframework.scheduling.quartz.QuartzJobBean;

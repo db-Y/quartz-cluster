@@ -1,6 +1,6 @@
-package com.github.quartzcluster.config;
+package com.github.zw201913.quartzcluster.config;
 
-import com.github.quartzcluster.annotation.EnableQuartzCluster;
+import com.github.zw201913.quartzcluster.annotation.EnableQuartzCluster;
 import com.google.common.collect.Maps;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;

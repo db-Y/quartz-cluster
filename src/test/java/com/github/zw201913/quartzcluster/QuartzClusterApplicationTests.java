@@ -1,4 +1,4 @@
-package com.github.quartzcluster;
+package com.github.zw201913.quartzcluster;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +9,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class QuartzClusterApplicationTests {
 
-    @Test
-    public void contextLoads() {}
+	@Test
+	public void contextLoads() {
+	}
+
 }
