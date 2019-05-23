@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ScheduleServiceImpl implements IScheduleService {
 
-    @Autowired
-    private Scheduler scheduler;
+    @Autowired private Scheduler scheduler;
 
     @Override
     public void schedule(CronJobDefinition cronJobDefinition) {
@@ -27,6 +26,7 @@ public class ScheduleServiceImpl implements IScheduleService {
 
     /**
      * 暂停触发器
+     *
      * @param key
      */
     @Override
@@ -36,6 +36,7 @@ public class ScheduleServiceImpl implements IScheduleService {
 
     /**
      * 恢复触发器
+     *
      * @param key
      */
     @Override
@@ -45,11 +46,43 @@ public class ScheduleServiceImpl implements IScheduleService {
 
     /**
      * 移除触发器
+     *
      * @param key
      * @return
      */
     @Override
     public boolean removeTrigger(Key key) {
         return key.removeTrigger(scheduler);
+    }
+
+    /**
+     * 暂停任务
+     *
+     * @param key
+     */
+    @Override
+    public void pauseJob(Key key) {
+        key.pauseJob(scheduler);
+    }
+
+    /**
+     * 恢复任务
+     *
+     * @param key
+     */
+    @Override
+    public void resumeJob(Key key) {
+        key.resumeJob(scheduler);
+    }
+
+    /**
+     * 移除任务
+     *
+     * @param key
+     * @return
+     */
+    @Override
+    public boolean removeJob(Key key) {
+        return key.removeJob(scheduler);
     }
 }

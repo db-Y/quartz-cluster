@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author zouwei
  */
 @EnableQuartzCluster
-
 //@EnableQuartzCluster("classpath:文件名")
 //@EnableQuartzCluster("配置文件绝对路径")
 @SpringBootApplication

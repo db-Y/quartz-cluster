@@ -67,13 +67,12 @@ public abstract class JobDefinition extends Key implements Serializable {
      * @return
      */
     private JobDetail jobDetail() {
-        JobKey jobKey = new JobKey(getName(), getGroup());
         JobDetail jobDetail =
                 JobBuilder.newJob(
                                 isConcurrent()
                                         ? ConcurrentQuartzJob.class
                                         : DisallowConcurrentQuartzJob.class)
-                        .withIdentity(jobKey)
+                        .withIdentity(jobKey())
                         .withDescription(getDescription())
                         .build();
         jobDetail.getJobDataMap().put(Const.JOB_DATA_KEY, this);

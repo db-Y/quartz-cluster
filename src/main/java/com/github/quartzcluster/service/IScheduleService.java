@@ -33,4 +33,26 @@ public interface IScheduleService {
      * @return
      */
     boolean removeTrigger(Key key);
+
+    /**
+     * 暂停任务
+     *
+     * @param key
+     */
+    void pauseJob(Key key);
+
+    /**
+     * 恢复任务
+     *
+     * @param key
+     */
+    void resumeJob(Key key);
+
+    /**
+     * 移除任务
+     *
+     * @param key
+     * @return
+     */
+    boolean removeJob(Key key);
 }
