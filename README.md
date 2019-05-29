@@ -260,7 +260,7 @@ public class ScheduleController {
     }
 }
 ```
-**6.如果有需要的，可以自定义SchedulerListener，JobListener和TriggerListener**
+**6.如果有需要的，可以自定义SchedulerListener，JobListener和TriggerListener，并且交由spring来管理**
 ```
 @Service
 public class ScheduleListenerService extends SchedulerListenerSupport {
