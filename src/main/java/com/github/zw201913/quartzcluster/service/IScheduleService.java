@@ -3,6 +3,7 @@ package com.github.zw201913.quartzcluster.service;
 import com.github.zw201913.quartzcluster.support.CronJobDefinition;
 import com.github.zw201913.quartzcluster.support.Key;
 import com.github.zw201913.quartzcluster.support.SimpleJobDefinition;
+import org.quartz.SchedulerException;
 
 /** @author zouwei */
 public interface IScheduleService {
@@ -55,4 +56,10 @@ public interface IScheduleService {
      * @return
      */
     boolean removeJob(Key key);
+
+    /**
+     * 清除所有任务
+     * @throws SchedulerException
+     */
+    void clear() throws SchedulerException;
 }

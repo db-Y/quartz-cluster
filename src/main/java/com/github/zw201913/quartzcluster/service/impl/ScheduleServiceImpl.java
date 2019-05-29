@@ -5,6 +5,7 @@ import com.github.zw201913.quartzcluster.support.CronJobDefinition;
 import com.github.zw201913.quartzcluster.support.Key;
 import com.github.zw201913.quartzcluster.support.SimpleJobDefinition;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,5 +85,15 @@ public class ScheduleServiceImpl implements IScheduleService {
     @Override
     public boolean removeJob(Key key) {
         return key.removeJob(scheduler);
+    }
+
+    /**
+     * 清除所有任务
+     *
+     * @throws SchedulerException
+     */
+    @Override
+    public void clear() throws SchedulerException {
+        scheduler.clear();
     }
 }
