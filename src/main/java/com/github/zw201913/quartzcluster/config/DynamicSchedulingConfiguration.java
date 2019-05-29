@@ -3,6 +3,7 @@ package com.github.zw201913.quartzcluster.config;
 import com.github.zw201913.quartzcluster.annotation.EnableQuartzCluster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -16,6 +17,9 @@ public class DynamicSchedulingConfiguration {
 
     /** 获取spring中的数据源 */
     @Autowired private DataSource dataSource;
+
+    /** 保证ApplicationContextUtil在SchedulerFactoryBean之前加载 */
+    @Autowired private ApplicationContextUtil applicationContextUtil;
 
     @Bean(name = "schedulerFactoryBean", destroyMethod = "destroy")
     public SchedulerFactoryBean schedulerFactoryBean() {
