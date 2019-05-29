@@ -10,9 +10,10 @@
 <dependency>
     <groupId>com.github.zw201913</groupId>
     <artifactId>quartz-cluster</artifactId>
-    <version>1.0.2.RELEASE</version>
+    <version>1.0.3.RELEASE</version>
 </dependency>
 ```
+需要至少JDK8版本
 
 **2.扫描指定包名**
 ```
