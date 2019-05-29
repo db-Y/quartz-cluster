@@ -10,7 +10,7 @@
 <dependency>
     <groupId>com.github.zw201913</groupId>
     <artifactId>quartz-cluster</artifactId>
-    <version>1.0.3.RELEASE</version>
+    <version>1.0.4.RELEASE</version>
 </dependency>
 ```
 需要至少JDK8版本
