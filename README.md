@@ -10,7 +10,7 @@
 <dependency>
     <groupId>com.github.zw201913</groupId>
     <artifactId>quartz-cluster</artifactId>
-    <version>1.0.1.RELEASE</version>
+    <version>1.0.2.RELEASE</version>
 </dependency>
 ```
 
