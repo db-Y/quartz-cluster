@@ -10,7 +10,7 @@
 <dependency>
     <groupId>com.github.zw201913</groupId>
     <artifactId>quartz-cluster</artifactId>
-    <version>1.0.4.RELEASE</version>
+    <version>1.0.5.RELEASE</version>
 </dependency>
 ```
 需要至少JDK8版本
@@ -20,45 +20,79 @@
 @ComponentScan("com.github.zw201913.quartzcluster")
 @EnableQuartzCluster
 ```
-**3.添加quartz.properties配置文件**
+**3.添加quartz配置**
 在resources里面添加quartz.properties
 ```
-#============================================================================
-# Configure JobStore
-# Using Spring datasource in SchedulerConfig.java
-# Spring uses LocalDataSourceJobStore extension of JobStoreCMT
-#============================================================================
-org.quartz.jobStore.useProperties=false
-org.quartz.jobStore.tablePrefix = QRTZ_
-org.quartz.jobStore.isClustered = true
-org.quartz.jobStore.clusterCheckinInterval = 5000
-org.quartz.jobStore.misfireThreshold = 60000
-org.quartz.jobStore.txIsolationLevelReadCommitted = true
-org.quartz.jobStore.class = org.quartz.impl.jdbcjobstore.JobStoreTX
-org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-
-#============================================================================
-# Configure Main Scheduler Properties
-# Needed to manage cluster instances
-#============================================================================
-org.quartz.scheduler.instanceName = ClusterQuartz
-org.quartz.scheduler.instanceId= AUTO
-org.quartz.scheduler.rmi.export = false
-org.quartz.scheduler.rmi.proxy = false
-org.quartz.scheduler.wrapJobExecutionInUserTransaction = false
-
-#============================================================================
-# Configure ThreadPool
-# Can also be configured in spring configuration
-#============================================================================
-#org.quartz.threadPool.class = org.quartz.simpl.SimpleThreadPool
-#org.quartz.threadPool.threadCount = 5
-#org.quartz.threadPool.threadPriority = 5
-#org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread = true
-
+spring:
+  quartz:
+    #相关属性配置
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: clusteredScheduler
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 10000
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+    #数据库方式
+    job-store-type: jdbc
 ```
 **4.创建数据库表单**
 ```
+-- ----------------------------
+-- Table structure for QRTZ_JOB_DETAILS
+-- ----------------------------
+DROP TABLE IF EXISTS `QRTZ_JOB_DETAILS`;
+CREATE TABLE `QRTZ_JOB_DETAILS` (
+  `SCHED_NAME` varchar(120) COLLATE utf8mb4_bin NOT NULL,
+  `JOB_NAME` varchar(200) COLLATE utf8mb4_bin NOT NULL,
+  `JOB_GROUP` varchar(200) COLLATE utf8mb4_bin NOT NULL,
+  `DESCRIPTION` varchar(250) COLLATE utf8mb4_bin DEFAULT NULL,
+  `JOB_CLASS_NAME` varchar(250) COLLATE utf8mb4_bin NOT NULL,
+  `IS_DURABLE` varchar(1) COLLATE utf8mb4_bin NOT NULL,
+  `IS_NONCONCURRENT` varchar(1) COLLATE utf8mb4_bin NOT NULL,
+  `IS_UPDATE_DATA` varchar(1) COLLATE utf8mb4_bin NOT NULL,
+  `REQUESTS_RECOVERY` varchar(1) COLLATE utf8mb4_bin NOT NULL,
+  `JOB_DATA` blob,
+  PRIMARY KEY (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Table structure for QRTZ_TRIGGERS
+-- ----------------------------
+DROP TABLE IF EXISTS `QRTZ_TRIGGERS`;
+CREATE TABLE `QRTZ_TRIGGERS` (
+  `SCHED_NAME` varchar(120) COLLATE utf8mb4_bin NOT NULL,
+  `TRIGGER_NAME` varchar(200) COLLATE utf8mb4_bin NOT NULL,
+  `TRIGGER_GROUP` varchar(200) COLLATE utf8mb4_bin NOT NULL,
+  `JOB_NAME` varchar(200) COLLATE utf8mb4_bin NOT NULL,
+  `JOB_GROUP` varchar(200) COLLATE utf8mb4_bin NOT NULL,
+  `DESCRIPTION` varchar(250) COLLATE utf8mb4_bin DEFAULT NULL,
+  `NEXT_FIRE_TIME` bigint(13) DEFAULT NULL,
+  `PREV_FIRE_TIME` bigint(13) DEFAULT NULL,
+  `PRIORITY` int(11) DEFAULT NULL,
+  `TRIGGER_STATE` varchar(16) COLLATE utf8mb4_bin NOT NULL,
+  `TRIGGER_TYPE` varchar(8) COLLATE utf8mb4_bin NOT NULL,
+  `START_TIME` bigint(13) NOT NULL,
+  `END_TIME` bigint(13) DEFAULT NULL,
+  `CALENDAR_NAME` varchar(200) COLLATE utf8mb4_bin DEFAULT NULL,
+  `MISFIRE_INSTR` smallint(2) DEFAULT NULL,
+  `JOB_DATA` blob,
+  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
+  KEY `SCHED_NAME` (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
+  CONSTRAINT `QRTZ_TRIGGERS_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `QRTZ_JOB_DETAILS` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
 DROP TABLE IF EXISTS `QRTZ_BLOB_TRIGGERS`;
 CREATE TABLE `QRTZ_BLOB_TRIGGERS` (
   `SCHED_NAME` varchar(120) COLLATE utf8mb4_bin NOT NULL,
@@ -115,23 +149,6 @@ CREATE TABLE `QRTZ_FIRED_TRIGGERS` (
   PRIMARY KEY (`SCHED_NAME`,`ENTRY_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
--- ----------------------------
--- Table structure for QRTZ_JOB_DETAILS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_JOB_DETAILS`;
-CREATE TABLE `QRTZ_JOB_DETAILS` (
-  `SCHED_NAME` varchar(120) COLLATE utf8mb4_bin NOT NULL,
-  `JOB_NAME` varchar(200) COLLATE utf8mb4_bin NOT NULL,
-  `JOB_GROUP` varchar(200) COLLATE utf8mb4_bin NOT NULL,
-  `DESCRIPTION` varchar(250) COLLATE utf8mb4_bin DEFAULT NULL,
-  `JOB_CLASS_NAME` varchar(250) COLLATE utf8mb4_bin NOT NULL,
-  `IS_DURABLE` varchar(1) COLLATE utf8mb4_bin NOT NULL,
-  `IS_NONCONCURRENT` varchar(1) COLLATE utf8mb4_bin NOT NULL,
-  `IS_UPDATE_DATA` varchar(1) COLLATE utf8mb4_bin NOT NULL,
-  `REQUESTS_RECOVERY` varchar(1) COLLATE utf8mb4_bin NOT NULL,
-  `JOB_DATA` blob,
-  PRIMARY KEY (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- ----------------------------
 -- Table structure for QRTZ_LOCKS
@@ -201,32 +218,6 @@ CREATE TABLE `QRTZ_SIMPROP_TRIGGERS` (
   `BOOL_PROP_2` varchar(1) COLLATE utf8mb4_bin DEFAULT NULL,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
   CONSTRAINT `QRTZ_SIMPROP_TRIGGERS_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-
--- ----------------------------
--- Table structure for QRTZ_TRIGGERS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_TRIGGERS`;
-CREATE TABLE `QRTZ_TRIGGERS` (
-  `SCHED_NAME` varchar(120) COLLATE utf8mb4_bin NOT NULL,
-  `TRIGGER_NAME` varchar(200) COLLATE utf8mb4_bin NOT NULL,
-  `TRIGGER_GROUP` varchar(200) COLLATE utf8mb4_bin NOT NULL,
-  `JOB_NAME` varchar(200) COLLATE utf8mb4_bin NOT NULL,
-  `JOB_GROUP` varchar(200) COLLATE utf8mb4_bin NOT NULL,
-  `DESCRIPTION` varchar(250) COLLATE utf8mb4_bin DEFAULT NULL,
-  `NEXT_FIRE_TIME` bigint(13) DEFAULT NULL,
-  `PREV_FIRE_TIME` bigint(13) DEFAULT NULL,
-  `PRIORITY` int(11) DEFAULT NULL,
-  `TRIGGER_STATE` varchar(16) COLLATE utf8mb4_bin NOT NULL,
-  `TRIGGER_TYPE` varchar(8) COLLATE utf8mb4_bin NOT NULL,
-  `START_TIME` bigint(13) NOT NULL,
-  `END_TIME` bigint(13) DEFAULT NULL,
-  `CALENDAR_NAME` varchar(200) COLLATE utf8mb4_bin DEFAULT NULL,
-  `MISFIRE_INSTR` smallint(2) DEFAULT NULL,
-  `JOB_DATA` blob,
-  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  KEY `SCHED_NAME` (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
-  CONSTRAINT `QRTZ_TRIGGERS_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `QRTZ_JOB_DETAILS` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 ```
 **5.自定义Controller使用com.github.zw201913.quartzcluster.service.IScheduleService**
