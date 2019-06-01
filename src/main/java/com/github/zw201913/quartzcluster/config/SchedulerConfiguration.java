@@ -11,6 +11,10 @@ import java.util.Objects;
 /** @author zouwei */
 @Slf4j
 public class SchedulerConfiguration {
+
+    /** 保证ApplicationContextUtil在Scheduler之前加载 */
+    @Autowired private ApplicationContextUtil applicationContextUtil;
+
     @Autowired(required = false)
     private SchedulerListener schedulerListener;
 

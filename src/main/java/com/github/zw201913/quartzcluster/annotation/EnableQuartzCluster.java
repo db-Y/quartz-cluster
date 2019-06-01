@@ -12,10 +12,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Import(DynamicSchedulingConfigurationSelector.class)
 public @interface EnableQuartzCluster {
-
-    String CLASSPATH_PREFIX = "classpath:";
-
-    String DEFAULT_PROPERTIES = "quartz.properties";
-
-    String value() default CLASSPATH_PREFIX + DEFAULT_PROPERTIES;
 }
